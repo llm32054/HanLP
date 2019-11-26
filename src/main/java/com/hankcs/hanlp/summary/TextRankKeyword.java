@@ -115,9 +115,9 @@ public class TextRankKeyword extends KeywordExtractor
      */
     public Map<String, Float> getTermAndRank(List<Term> termList)
     {
-        // 存放去停用词后的结果
+        // 存放去停用词、动词和介词等词性后的结果（只保留名词和形容词）
         List<String> wordList = new ArrayList<String>(termList.size());
-        // for循环遍历去停用词
+        // for循环遍历去停用词、动词和介词等词性的词汇
         for (Term t : termList)
         {
             if (shouldInclude(t))
@@ -162,6 +162,7 @@ public class TextRankKeyword extends KeywordExtractor
         {
             score.put(entry.getKey(), sigMoid(entry.getValue().size()));
         }
+        // 迭代计算单词的分数
         for (int i = 0; i < max_iter; ++i)
         {
             Map<String, Float> m = new HashMap<String, Float>();

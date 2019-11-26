@@ -186,6 +186,7 @@ public class PositionRankKeyword extends KeywordExtractor {
         {
             score.put(entry.getKey(), sigMoid(entry.getValue().size()));
         }
+        // 迭代计算单词的分数
         for (int i = 0; i < max_iter; ++i)
         {
             Map<String, Float> m = new HashMap<String, Float>();
