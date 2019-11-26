@@ -43,7 +43,7 @@ public abstract class KeywordExtractor
     }
 
     /**
-     * 是否应当将这个term纳入计算，词性属于名词、动词、副词、形容词
+     * 是否应当将这个term纳入计算，词性属于名词、形容词
      *
      * @param term
      * @return 是否应当
@@ -104,5 +104,10 @@ public abstract class KeywordExtractor
         }
     }
 
+    /**
+     * @param termList
+     * @param size
+     * @return
+     */
     abstract public List<String> getKeywords(List<Term> termList, int size);
 }
