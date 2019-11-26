@@ -22,6 +22,9 @@ public class TextRankKeyword extends KeywordExtractor
      * 最大迭代次数
      */
     public static int max_iter = 200;
+    /**
+     * 阈值
+     */
     final static float min_diff = 0.001f;
 
     public TextRankKeyword(Segment defaultSegment)
@@ -105,14 +108,16 @@ public class TextRankKeyword extends KeywordExtractor
     }
 
     /**
-     * 使用已经分好的词来计算rank
+     * 使用已经分好的词来计算rank（原始TextRank公式）
      *
      * @param termList
      * @return
      */
     public Map<String, Float> getTermAndRank(List<Term> termList)
     {
+        // 存放去停用词后的结果
         List<String> wordList = new ArrayList<String>(termList.size());
+        // for循环遍历去停用词
         for (Term t : termList)
         {
             if (shouldInclude(t))
@@ -121,7 +126,9 @@ public class TextRankKeyword extends KeywordExtractor
             }
         }
 //        System.out.println(wordList);
+        // 存放wordList去重后的结果
         Map<String, Set<String>> words = new TreeMap<String, Set<String>>();
+        // 借助que统计滑动窗口为5的共现单词
         Queue<String> que = new LinkedList<String>();
         for (String w : wordList)
         {
@@ -134,6 +141,7 @@ public class TextRankKeyword extends KeywordExtractor
             {
                 que.poll();
             }
+            // 遍历que统计共现单词
             for (String qWord : que)
             {
                 if (w.equals(qWord))
@@ -147,8 +155,9 @@ public class TextRankKeyword extends KeywordExtractor
             que.offer(w);
         }
 //        System.out.println(words);
+        // 用于存放单词的分数
         Map<String, Float> score = new HashMap<String, Float>();
-        //依据TF来设置初值
+        // 依据TF来设置初值
         for (Map.Entry<String, Set<String>> entry : words.entrySet())
         {
             score.put(entry.getKey(), sigMoid(entry.getValue().size()));
@@ -166,11 +175,134 @@ public class TextRankKeyword extends KeywordExtractor
                 {
                     int size = words.get(element).size();
                     if (key.equals(element) || size == 0) continue;
+                    // 原始TextRank公式
                     m.put(key, m.get(key) + d / size * (score.get(element) == null ? 0 : score.get(element)));
                 }
+                // 遍历一轮结束后，保留两次迭代的最大差值
                 max_diff = Math.max(max_diff, Math.abs(m.get(key) - (score.get(key) == null ? 0 : score.get(key))));
             }
             score = m;
+            // 阈值小于min_diff，退出迭代
+            if (max_diff <= min_diff) break;
+        }
+
+        return score;
+    }
+
+    /**
+     *  PositionRank 公式提取关键词
+     * @param termList
+     * @return
+     */
+    public Map<String, Float> getTermAndRankByPositionRank(List<Term> termList)
+    {
+        // 只保留名词和形容词的结果
+        List<String> wordList = new ArrayList<String>(termList.size());
+        // for循环遍历去除（除名词和形容词）其他词性词汇
+        for (Term t : termList)
+        {
+            if (shouldInclude(t))
+            {
+                wordList.add(t.word);
+            }
+        }
+//        System.out.println(wordList);
+        // 存放单词共现结果（不包含重复单词）
+        Map<String, Set<String>> words = new TreeMap<String, Set<String>>();
+        // 存放单词共现结果（包含重复单词）
+        Map<String, List<String>> coWords = new TreeMap<String, List<String>>();
+        // 存放 PositionRank 中单词的重启概率
+        Map<String,Float> wordCountMap = new HashMap<String,Float>(wordList.size());
+        // 存放单词位置
+        int position = 1;
+        // 借助que统计滑动窗口为5的共现单词
+        Queue<String> que = new LinkedList<String>();
+        for (String w : wordList)
+        {
+            // 计算重启概率
+            if(!wordCountMap.containsKey(w)){
+                wordCountMap.put(w,1.0f/position++);
+            }else{
+                wordCountMap.put(w,wordCountMap.get(w)+1.0f/position++);
+            }
+            // 构建words，用来存放单词的共现单词
+            if (!words.containsKey(w))
+            {
+                words.put(w, new TreeSet<String>());
+                coWords.put(w, new ArrayList<String>());
+            }
+            // 复杂度O(n-1)
+            if (que.size() >= 5)
+            {
+                que.poll();
+            }
+            // 遍历que统计共现单词
+            for (String qWord : que)
+            {
+                if (w.equals(qWord))
+                {
+                    continue;
+                }
+                //既然是邻居,那么关系是相互的,遍历一遍即可
+                words.get(w).add(qWord);
+                words.get(qWord).add(w);
+                // 构建共现关系
+                coWords.get(w).add(qWord);
+                coWords.get(qWord).add(w);
+            }
+            que.offer(w);
+        }
+
+        // 归一化重启概率
+        float sum = 0;
+        for(int i = 1; i <= wordList.size(); i++){
+            sum = sum + 1.0f/i;
+        }
+        Iterator it = wordCountMap.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry<String,Float> e = (Map.Entry<String,Float>) it.next();
+            wordCountMap.put(e.getKey(),e.getValue()/sum);
+        }
+//        System.out.println(words);
+        // 用于存放单词的分数
+        Map<String, Float> score = new HashMap<String, Float>();
+        // 依据TF来设置初值
+        for (Map.Entry<String, Set<String>> entry : words.entrySet())
+        {
+            score.put(entry.getKey(), sigMoid(entry.getValue().size()));
+        }
+        for (int i = 0; i < max_iter; ++i)
+        {
+            Map<String, Float> m = new HashMap<String, Float>();
+            float max_diff = 0;
+            for (Map.Entry<String, Set<String>> entry : words.entrySet())
+            {
+                String key = entry.getKey();
+                Set<String> value = entry.getValue();
+                // 修改重启概率的关键代码
+                m.put(key, (1 - d) * wordCountMap.get(key));
+                for (String element : value)
+                {
+                    // 分母
+                    int den = coWords.get(element).size();
+                    // 分子
+                    int mol = 0;
+                    // 计算分子
+                    for(int j = 0; j < den; j++){
+                        if(key.equals(coWords.get(element).get(j))){
+                            ++mol;
+                        }
+                    }
+                    //int size = words.get(element).size();
+                    if (key.equals(element) || den == 0) continue;
+                    // PositionRank 公式
+                    m.put(key, m.get(key) + d * mol/den * (score.get(element) == null ? 0 : score.get(element)));
+                }
+                // 遍历一轮结束后，保留两次迭代的最大差值
+                max_diff = Math.max(max_diff, Math.abs(m.get(key) - (score.get(key) == null ? 0 : score.get(key))));
+            }
+            score = m;
+            // 阈值小于min_diff，退出迭代
             if (max_diff <= min_diff) break;
         }
 
@@ -191,7 +323,8 @@ public class TextRankKeyword extends KeywordExtractor
     @Override
     public List<String> getKeywords(List<Term> termList, int size)
     {
-        Set<Map.Entry<String, Float>> entrySet = top(size, getTermAndRank(termList)).entrySet();
+        // 返回分数最高的前size个分词结果和对应的rank
+        Set<Map.Entry<String, Float>> entrySet = top(size, getTermAndRankByPositionRank(termList)).entrySet();
         List<String> result = new ArrayList<String>(entrySet.size());
         for (Map.Entry<String, Float> entry : entrySet)
         {
