@@ -81,7 +81,8 @@ public class CoreStopWordDictionary
     }
 
     /**
-     * 核心停用词典的核心过滤器，词性属于名词、动词、副词、形容词，并且不在停用词表中才不会被过滤
+     * 核心停用词典的核心过滤器，词性属于名词、形容词，并且不在停用词表中才不会被过滤
+     * 修改：添加过滤v和d词性
      */
     public static Filter FILTER = new Filter()
     {
@@ -105,6 +106,10 @@ public class CoreStopWordDictionary
                 case 'z':
                 case 'r':
                 case 'w':
+                // 动词
+                case 'v':
+                // 副词
+                case 'd':
                 {
                     return false;
                 }
@@ -132,6 +137,7 @@ public class CoreStopWordDictionary
     {
         return FILTER.shouldInclude(term);
     }
+
 
     /**
      * 是否应当去掉这个词
