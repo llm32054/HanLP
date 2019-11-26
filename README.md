@@ -35,6 +35,7 @@ HanLP提供下列功能：
         * [感知机命名实体识别](https://github.com/hankcs/HanLP/wiki/%E7%BB%93%E6%9E%84%E5%8C%96%E6%84%9F%E7%9F%A5%E6%9C%BA%E6%A0%87%E6%B3%A8%E6%A1%86%E6%9E%B6)、[CRF命名实体识别](https://github.com/hankcs/HanLP/wiki/CRF%E8%AF%8D%E6%B3%95%E5%88%86%E6%9E%90)
 * 关键词提取
     * [TextRank关键词提取](https://github.com/hankcs/HanLP#14-%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96)
+    * [PositionRank关键词提取](https://github.com/hankcs/HanLP#14-%E5%85%B3%E9%94%AE%E8%AF%8D%E6%8F%90%E5%8F%96)
 * 自动摘要
     * [TextRank自动摘要](https://github.com/hankcs/HanLP#15-%E8%87%AA%E5%8A%A8%E6%91%98%E8%A6%81)
 * 短语提取
@@ -408,7 +409,12 @@ for (String sentence : testCase)
 
 ```java
 String content = "程序员(英文Programmer)是从事程序开发、维护的专业人员。一般将程序员分为程序设计人员和程序编码人员，但两者的界限并不非常清楚，特别是在中国。软件从业人员分为初级程序员、高级程序员、系统分析员和项目经理四大类。";
-List<String> keywordList = HanLP.extractKeyword(content, 5);
+List<String> keywordList = textRankKeyWord(content,5);
+System.out.println(keywordList);
+```
+```java
+String content = "程序员(英文Programmer)是从事程序开发、维护的专业人员。一般将程序员分为程序设计人员和程序编码人员，但两者的界限并不非常清楚，特别是在中国。软件从业人员分为初级程序员、高级程序员、系统分析员和项目经理四大类。";
+List<String> keywordList = positionRankKeyWord(content,5);
 System.out.println(keywordList);
 ```
 - 说明
