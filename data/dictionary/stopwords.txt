@@ -1,4 +1,4 @@
-&nbsp
+﻿&nbsp
 &nbsp;
 aboard
 about
@@ -416,6 +416,8 @@ yourselves
 ˋ
 ˜
 ‐
+-
+%
 —　
 ―
 ‖

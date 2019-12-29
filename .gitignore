@@ -34,3 +34,4 @@ data/model/*
 .java-version
 # 配置文件等（资源文件统一放到data）
 src/main/resources/
+/bin/
