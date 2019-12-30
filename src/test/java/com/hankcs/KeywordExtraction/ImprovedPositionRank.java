@@ -39,10 +39,10 @@ public class ImprovedPositionRank {
 
 		for (int i = 0; i < list.size(); i++) {
 			// 读取文本标题（只读取第二行）
-			// String title = FileUtil.readTitle(list.get(i));
-			String title = "";
+			String title = FileUtil.readTitle(list.get(i));
+			// String title = "";
 			// 读取文本正文内容（从第三行开始）
-			String content = FileUtil.readContents(list.get(i));
+			String content = FileUtil.readContentsFrom3(list.get(i));
 			// 生成关键词
 			List<String> keywordList = improvedPositionRankKeyWord(
 					title, content, Global.keyWordNum);
