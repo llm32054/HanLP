@@ -42,7 +42,8 @@ public class PositionRank {
 			// 读取文本内容
 			String content = FileUtil.readContents(list.get(i));
 			// 生成关键词
-			List<String> keywordList = positionRankKeyWord(content, 5);
+			List<String> keywordList =
+					positionRankKeyWord(content, Global.keyWordNum);
 			// 输出文件
 			FileUtil.appendMethod(ResultsFile,
 					list.get(i).getName().split("\\.")[0] + "："

@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.hankcs.KeywordExtraction.Global;
 import com.hankcs.hanlp.algorithm.MaxHeap;
 import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
@@ -333,7 +334,7 @@ public class ImprovedPositionRankKeyword extends KeywordExtractor {
 				coWords.put(w, new ArrayList<String>());
 			}
 			// 复杂度O(n-1)
-			if (que.size() >= 5) {
+			if (que.size() >= Global.slidingWindow) {
 				que.poll();
 			}
 			// 遍历que统计共现单词

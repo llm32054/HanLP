@@ -44,8 +44,8 @@ public class ImprovedPositionRank {
 			// 读取文本正文内容（从第三行开始）
 			String content = FileUtil.readContents(list.get(i));
 			// 生成关键词
-			List<String> keywordList =
-					improvedPositionRankKeyWord(title, content, 5);
+			List<String> keywordList = improvedPositionRankKeyWord(
+					title, content, Global.keyWordNum);
 			// 输出文件
 			FileUtil.appendMethod(ResultsFile,
 					list.get(i).getName().split("\\.")[0] + "："
