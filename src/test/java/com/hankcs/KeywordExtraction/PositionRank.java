@@ -39,7 +39,7 @@ public class PositionRank {
 		List<File> list = FileUtil.getFile(new File(testDataSetDir));
 
 		for (int i = 0; i < list.size(); i++) {
-			// 读取文本内容
+			// 读取文本内容（第二行开始）
 			String content = FileUtil.readContents(list.get(i));
 			// 生成关键词
 			List<String> keywordList =
