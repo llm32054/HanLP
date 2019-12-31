@@ -283,16 +283,27 @@ public class ImprovedPositionRankKeyword extends KeywordExtractor {
 	 */
 	public Map<String, Float> getTermAndRank(List<Term> titleTermList,
 			List<Term> termList) {
-		// 只保留名词和形容词的结果
+		// 只保留文本【正文】名词和形容词的结果
 		List<String> wordList = new ArrayList<String>(termList.size());
+		// 只保留文本【标题】名词和形容词的结果
+		List<String> titleWordList =
+				new ArrayList<String>(titleTermList.size());
 		// for循环遍历去除（除名词和形容词）其他词性词汇
 		for (Term t : termList) {
 			if (shouldInclude(t)) {
 				wordList.add(t.word);
 			}
 		}
-		System.out.println("去停用词及词性过滤的结果：");
+		// for循环遍历去除（除名词和形容词）其他词性词汇
+		for (Term t : titleTermList) {
+			if (shouldInclude(t)) {
+				titleWordList.add(t.word);
+			}
+		}
+		System.out.println("文本【正文】去停用词及词性过滤的结果：");
 		System.out.println(wordList);
+		System.out.println("文本【标题】去停用词及词性过滤的结果：");
+		System.out.println(titleWordList);
 		// 存放单词共现结果（不包含重复单词）
 		Map<String, Set<String>> words =
 				new TreeMap<String, Set<String>>();
@@ -310,12 +321,12 @@ public class ImprovedPositionRankKeyword extends KeywordExtractor {
 			// 计算重启概率
 			if (!wordCountMap.containsKey(w)) {
 				// 统计w在标题中的出现次数
-				int num = Collections.frequency(titleTermList, w);
+				int num = Collections.frequency(titleWordList, w);
 				// 判断是否出现在标题中
 				if (num != 0) {// 出现在标题中
 					wordCountMap.put(w, (wordList.size() - position++)
 							* 1.0f / wordList.size()
-							+ num * 1.0f / titleTermList.size());
+							+ num * 1.0f / titleWordList.size());
 
 				} else { // 没有出现在标题中
 					wordCountMap.put(w, (wordList.size() - position++)
