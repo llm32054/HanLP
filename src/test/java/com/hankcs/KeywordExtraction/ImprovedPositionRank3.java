@@ -62,7 +62,7 @@ public class ImprovedPositionRank3 {
 			// 读取文本正文内容（从第三行开始）
 			String content = FileUtil.readContentsFrom3(list.get(i));
 			// 生成关键词
-			List<String> keywordList = improvedPositionRankKeyWord2(
+			List<String> keywordList = improvedPositionRankKeyWord3(
 					title, content, Global.keyWordNum);
 			// 输出文件
 			FileUtil.appendMethod(ResultsFile,
@@ -80,7 +80,7 @@ public class ImprovedPositionRank3 {
 	 * @param size 提取数目
 	 * @return
 	 */
-	public static List<String> improvedPositionRankKeyWord2(
+	public static List<String> improvedPositionRankKeyWord3(
 			String title, String content, int size) {
 		return HanLP.extractKeywordByImprovedPositionRank3(title,
 				content, size);
