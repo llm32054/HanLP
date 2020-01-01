@@ -55,6 +55,7 @@ import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.summary.ImprovedPositionRankKeyword;
 import com.hankcs.hanlp.summary.ImprovedPositionRankKeyword2;
 import com.hankcs.hanlp.summary.ImprovedPositionRankKeyword3;
+import com.hankcs.hanlp.summary.ImprovedPositionRankKeyword4;
 import com.hankcs.hanlp.summary.PositionRankKeyword;
 import com.hankcs.hanlp.summary.TextRankKeyword;
 import com.hankcs.hanlp.summary.TextRankSentence;
@@ -959,6 +960,19 @@ public class HanLP {
 	public static List<String> extractKeywordByImprovedPositionRank3(
 			String title, String document, int size) {
 		return ImprovedPositionRankKeyword3.getKeywordList(title,
+				document, size);
+	}
+
+	/**
+	 * PositionRank改进版提取关键词
+	 *
+	 * @param document 文档内容
+	 * @param size     希望提取几个关键词
+	 * @return 一个列表
+	 */
+	public static List<String> extractKeywordByImprovedPositionRank4(
+			String title, String document, int size) {
+		return ImprovedPositionRankKeyword4.getKeywordList(title,
 				document, size);
 	}
 
