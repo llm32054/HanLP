@@ -95,7 +95,8 @@ public class HanLP {
 		 */
 		public static String CustomDictionaryPath[] = new String[] {
 				"data/dictionary/custom/CustomDictionary.txt",
-				"data/dictionary/custom/CustomDictionary_ShenCeBei2018.txt" };
+				"data/dictionary/custom/CustomDictionary_ShenCeBei2018.txt",
+				"data/dictionary/custom/CustomDictionary_gaNews.txt" };
 		/**
 		 * 2元语法词典路径
 		 */

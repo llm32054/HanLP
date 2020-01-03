@@ -108,7 +108,7 @@ public class FileUtil {
 	 * @return
 	 */
 	public static List<String> readContents1(File file) {
-		List<String> list = new ArrayList<String>(700);
+		List<String> list = new ArrayList<String>(2000);
 		// StringBuilder res = new StringBuilder();
 		BufferedReader br = null;
 

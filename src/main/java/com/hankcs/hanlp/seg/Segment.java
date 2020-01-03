@@ -578,9 +578,10 @@ public abstract class Segment {
 		//
 		// return termList;
 		// }
-		System.out.println("分词和词性标注结果：");
+
 		List<Term> list = segSentence(charArray);
 		if (Global.log) {
+			System.out.println("分词和词性标注结果：");
 			System.out.println(list);
 		}
 		return list;

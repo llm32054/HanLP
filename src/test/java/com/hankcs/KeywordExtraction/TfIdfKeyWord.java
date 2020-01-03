@@ -63,6 +63,8 @@ public class TfIdfKeyWord {
 							+ keywordList.toString().substring(1,
 									keywordList.toString().length() - 1)
 							+ "\r\n");
+			System.out.println(
+					"************第" + i + "篇文本提取完成************");
 		}
 
 	}
