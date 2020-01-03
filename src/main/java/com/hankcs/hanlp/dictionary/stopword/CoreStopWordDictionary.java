@@ -126,6 +126,53 @@ public class CoreStopWordDictionary {
 	};
 
 	/**
+	 * 筛选出姓名
+	 * @author liulimng
+	 */
+	public static Filter FILTER1 = new Filter() {
+		@Override
+		public boolean shouldInclude(Term term) {
+			// 除掉停用词
+			String nature =
+					term.nature != null ? term.nature.toString() : "空";
+			char firstChar = nature.charAt(0);
+			switch (firstChar) {
+			case 'm':
+			case 'b':
+			case 'c':
+			case 'e':
+			case 'o':
+			case 'p':
+			case 'q':
+			case 'u':
+			case 'y':
+			case 'z':
+			case 'r':
+			case 'w':
+				// 形容词
+			case 'a':
+				// 方位词
+			case 'f':
+				// 动词
+			case 'v':
+				// 副词
+			case 'd': {
+				return false;
+			}
+			default: {
+				if (!CoreStopWordDictionary.contains(term.word)
+						&& nature.startsWith("nr")) {// 人名
+					return true;
+				}
+			}
+				break;
+			}
+
+			return false;
+		}
+	};
+
+	/**
 	 * 是否应当将这个term纳入计算
 	 *
 	 * @param term
@@ -133,6 +180,15 @@ public class CoreStopWordDictionary {
 	 */
 	public static boolean shouldInclude(Term term) {
 		return FILTER.shouldInclude(term);
+	}
+
+	/**
+	 * 筛选姓名
+	 * @param term
+	 * @return 是否姓名
+	 */
+	public static boolean shouldIncludeName(Term term) {
+		return FILTER1.shouldInclude(term);
 	}
 
 	/**

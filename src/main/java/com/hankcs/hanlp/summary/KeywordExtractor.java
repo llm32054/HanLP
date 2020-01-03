@@ -45,8 +45,18 @@ public abstract class KeywordExtractor {
 	 * @return 是否应当
 	 */
 	protected boolean shouldInclude(Term term) {
-		// 除掉停用词
+		// 词性过滤只保留名词和形容词
 		return CoreStopWordDictionary.shouldInclude(term);
+	}
+
+	/**
+	 * 筛选姓名
+	 * @param term
+	 * @return 是否姓名
+	 */
+	protected boolean shouldIncludeName(Term term) {
+		// 筛选姓名
+		return CoreStopWordDictionary.shouldIncludeName(term);
 	}
 
 	/**
