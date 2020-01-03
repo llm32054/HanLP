@@ -299,10 +299,12 @@ public class ImprovedPositionRankKeyword4 extends KeywordExtractor {
 				titleWordList.add(t.word);
 			}
 		}
-		System.out.println("文本【正文】去停用词及词性过滤的结果：");
-		System.out.println(wordList);
-		System.out.println("文本【标题】去停用词及词性过滤的结果：");
-		System.out.println(titleWordList);
+		if (Global.log) {
+			System.out.println("文本【正文】去停用词及词性过滤的结果：");
+			System.out.println(wordList);
+			System.out.println("文本【标题】去停用词及词性过滤的结果：");
+			System.out.println(titleWordList);
+		}
 		// 存放单词共现结果（不包含重复单词）
 		Map<String, Set<String>> words =
 				new TreeMap<String, Set<String>>();
@@ -368,10 +370,15 @@ public class ImprovedPositionRankKeyword4 extends KeywordExtractor {
 			sum = sum + wordCountMap.get(key);
 		}
 
-		System.out.println("归一化后的重启概率：");
+		if (Global.log) {
+			System.out.println("归一化后的重启概率：");
+		}
 		for (String key : wordCountMap.keySet()) {
 			wordCountMap.put(key, wordCountMap.get(key) / sum);
-			System.out.print(key + ":" + wordCountMap.get(key) + " ");
+			if (Global.log) {
+				System.out
+						.print(key + ":" + wordCountMap.get(key) + " ");
+			}
 		}
 
 		/*Iterator it = wordCountMap.entrySet().iterator();
@@ -390,8 +397,11 @@ public class ImprovedPositionRankKeyword4 extends KeywordExtractor {
 			// score.put(entry.getKey(), sigMoid(entry.getValue().size()));
 			score.put(entry.getKey(), 1.0f / words.size());
 		}
-		System.out.println();
-		System.out.println("迭代分数：");
+		if (Global.log) {
+			System.out.println();
+			System.out.println("迭代分数：");
+		}
+
 		// 迭代计算单词的分数
 		for (int i = 0; i < max_iter; ++i) {
 			Map<String, Float> m = new HashMap<String, Float>();
@@ -427,19 +437,24 @@ public class ImprovedPositionRankKeyword4 extends KeywordExtractor {
 						Math.abs(m.get(key) - (score.get(key) == null
 								? 0 : score.get(key))));
 			}
-			for (Map.Entry<String, Float> entry1 : m.entrySet()) {
-				System.out.print(
-						entry1.getKey() + ":" + entry1.getValue());
+			if (Global.log) {
+				for (Map.Entry<String, Float> entry1 : m.entrySet()) {
+					System.out.print(
+							entry1.getKey() + ":" + entry1.getValue());
+				}
+				System.out.println("");
 			}
-			System.out.println("");
 			score = m;
 			// 阈值小于min_diff，退出迭代
 			if (max_diff <= min_diff)
 				break;
 		}
-		System.out.println("候选关键词得分：");
-		for (Map.Entry<String, Float> entry : score.entrySet()) {
-			System.out.println(entry.getKey() + ":" + entry.getValue());
+		if (Global.log) {
+			System.out.println("候选关键词得分：");
+			for (Map.Entry<String, Float> entry : score.entrySet()) {
+				System.out.println(
+						entry.getKey() + ":" + entry.getValue());
+			}
 		}
 		return score;
 	}

@@ -124,8 +124,10 @@ public class TextRankKeyword extends KeywordExtractor {
 				wordList.add(t.word);
 			}
 		}
-		System.out.println("去停用词及词性过滤的结果：");
-		System.out.println(wordList);
+		if (Global.log) {
+			System.out.println("去停用词及词性过滤后的结果：");
+			System.out.println(wordList);
+		}
 		// 存放wordList去重后的结果
 		Map<String, Set<String>> words =
 				new TreeMap<String, Set<String>>();
@@ -158,6 +160,10 @@ public class TextRankKeyword extends KeywordExtractor {
 			// score.put(entry.getKey(), sigMoid(entry.getValue().size()));
 			score.put(entry.getKey(), 1.0f / words.size());
 		}
+		if (Global.log) {
+			System.out.println();
+			System.out.println("迭代分数：");
+		}
 		// 迭代计算单词的分数
 		for (int i = 0; i < max_iter; ++i) {
 			Map<String, Float> m = new HashMap<String, Float>();
@@ -182,16 +188,25 @@ public class TextRankKeyword extends KeywordExtractor {
 						Math.abs(m.get(key) - (score.get(key) == null
 								? 0 : score.get(key))));
 			}
+			if (Global.log) {
+				for (Map.Entry<String, Float> entry1 : m.entrySet()) {
+					System.out.print(
+							entry1.getKey() + ":" + entry1.getValue());
+				}
+				System.out.println("");
+			}
 			score = m;
 			// 阈值小于min_diff，退出迭代
 			if (max_diff <= min_diff)
 				break;
 		}
-		System.out.println("候选关键词得分：");
-		for (Map.Entry<String, Float> entry : score.entrySet()) {
-			System.out.println(entry.getKey() + ":" + entry.getValue());
+		if (Global.log) {
+			System.out.println("候选关键词得分：");
+			for (Map.Entry<String, Float> entry : score.entrySet()) {
+				System.out.println(
+						entry.getKey() + ":" + entry.getValue());
+			}
 		}
-
 		return score;
 	}
 

@@ -44,6 +44,7 @@ import com.hankcs.hanlp.dictionary.ts.TraditionalToTaiwanChineseDictionary;
 import com.hankcs.hanlp.mining.phrase.IPhraseExtractor;
 import com.hankcs.hanlp.mining.phrase.MutualInformationEntropyPhraseExtractor;
 import com.hankcs.hanlp.mining.word.NewWordDiscover;
+import com.hankcs.hanlp.mining.word.TfIdfCounter;
 import com.hankcs.hanlp.mining.word.WordInfo;
 import com.hankcs.hanlp.model.crf.CRFLexicalAnalyzer;
 import com.hankcs.hanlp.model.perceptron.PerceptronLexicalAnalyzer;
@@ -93,7 +94,8 @@ public class HanLP {
 		 * 用户自定义词典路径
 		 */
 		public static String CustomDictionaryPath[] = new String[] {
-				"data/dictionary/custom/CustomDictionary.txt" };
+				"data/dictionary/custom/CustomDictionary.txt",
+				"data/dictionary/custom/CustomDictionary_ShenCeBei2018.txt" };
 		/**
 		 * 2元语法词典路径
 		 */
@@ -885,6 +887,19 @@ public class HanLP {
 		NewWordDiscover discover = new NewWordDiscover(max_word_len,
 				min_freq, min_entropy, min_aggregation, newWordsOnly);
 		return discover.discover(reader, size);
+	}
+
+	/**
+	 * TFIDF提取关键词
+	 *
+	 * @param document 文档内容
+	 * @param size     希望提取几个关键词
+	 * @return 一个列表
+	 */
+	public static List<String> extractKeywordByTFIDF(
+			TfIdfCounter tfIdfCounter, String document, int size) {
+		return tfIdfCounter.getKeywordList(tfIdfCounter, document,
+				size);
 	}
 
 	/**

@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.hankcs.KeywordExtraction.Global;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.collection.AhoCorasick.AhoCorasickDoubleArrayTrie;
 import com.hankcs.hanlp.collection.trie.DoubleArrayTrie;
@@ -578,8 +579,11 @@ public abstract class Segment {
 		// return termList;
 		// }
 		System.out.println("分词和词性标注结果：");
-		System.out.println(segSentence(charArray));
-		return segSentence(charArray);
+		List<Term> list = segSentence(charArray);
+		if (Global.log) {
+			System.out.println(list);
+		}
+		return list;
 	}
 
 	/**

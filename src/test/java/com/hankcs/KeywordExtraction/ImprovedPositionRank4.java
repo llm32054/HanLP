@@ -64,12 +64,18 @@ public class ImprovedPositionRank4 {
 			// 生成关键词
 			List<String> keywordList = improvedPositionRankKeyWord4(
 					title, content, Global.keyWordNum);
+			if (Global.log) {
+				System.out.println("关键词提取结果：");
+				System.out.println(keywordList);
+			}
 			// 输出文件
 			FileUtil.appendMethod(ResultsFile,
 					list.get(i).getName().split("\\.")[0] + "："
 							+ keywordList.toString().substring(1,
 									keywordList.toString().length() - 1)
 							+ "\r\n");
+			System.out.println(
+					"************第" + i + "篇文本提取完成************");
 		}
 	}
 

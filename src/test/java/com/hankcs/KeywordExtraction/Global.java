@@ -7,7 +7,7 @@ package com.hankcs.KeywordExtraction;
  */
 public class Global {
 	// 数据集的名称
-	public static final String dataSetName = "gaNews";
+	public static final String dataSetName = "shNews";
 	// 测试集目录
 	public static final String testDataSetDir =
 			"F:\\2019学业相关资料\\17127122刘立明关键词提取数据集\\" + dataSetName
@@ -16,6 +16,11 @@ public class Global {
 	public static final String testDataSetAnswerFile =
 			"F:\\2019学业相关资料\\17127122刘立明关键词提取数据集\\" + dataSetName
 					+ "\\test-answer\\test_answer.txt";
+	// 改进型PositionRank关键词提取结果
+	public static final String tfIdfResultFile =
+			"F:\\2019学业相关资料\\17127122刘立明关键词提取数据集\\" + dataSetName
+					+ "\\tfIdf\\tfIdf_answer.txt";
+
 	// TextRank关键词提取结果
 	public static final String textRankResultsFile =
 			"F:\\2019学业相关资料\\17127122刘立明关键词提取数据集\\" + dataSetName
@@ -43,11 +48,16 @@ public class Global {
 	/**
 	 * 提取关键词数目，默认为5个
 	 */
-	public static int keyWordNum = 3;
+	public static int keyWordNum = 5;
 
 	/**
 	 * 滑动窗口大小，默认为5
 	 */
 	public static int slidingWindow = 5;
+
+	/**
+	 * 是否输出关键词提取过程日志
+	 */
+	public static boolean log = true;
 
 }
